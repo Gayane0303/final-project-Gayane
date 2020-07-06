@@ -1,4 +1,4 @@
-
+from PageObjects.blog_page import Blogpage
 from PageObjects.home_page import Home
 import time
 
@@ -10,11 +10,8 @@ from PageObjects.youtube_page import YouTubePage
 
 class TestHomePage():
 
-    # 1. Get the link from config.json
-    # 2. Maximize is set in conftest
-    # 3. Search "google"
-    # 4. Checks if the opened url is correct and found results' count is true
-    # 5. Get all te found results titles and check if contain "google"
+
+    # Searching for a text and checking the found results' count, getting all the results links and checks if they all contain the searched item
     def test_search(self, browser):
         search_ = Home(browser)
         search_result_page_ = SearchResultsPage(browser)
@@ -31,12 +28,8 @@ class TestHomePage():
         for i in search_result_page_.get_found_items_links():
             assert i.lower().find("google") != -1
 
-    # 1. Get the link from config.json
-    # 2. Maximize is set in conftest
-    # 3. Scroll into the footer
-    # 4. Switch to 4 nested iframes
-    # 5. Wait element to be displayed
-    # 6. Get the element text inside the nested iframes
+
+    # Scroll into the footer, switches to the 4 nested items and get the text inside them
     def test_nested_irames_review_us(self, browser):
         review_us = ReviewUs(browser)
 
@@ -47,19 +40,17 @@ class TestHomePage():
         assert review_us.get_review_us_element_text() == 'Review us on'
         time.sleep(2)
 
-    # 1. Get the link from config.json
-    # 2. Maximize is set in conftest
-    # 3. Scroll into the footer
-    # 4. Wait twitter to be visible and click on Twitter
-    # 5. Switch into the twitter new opened tab, check the link
-    # 6. Switch into the first tab and click on Youtube
-    # 7. Switch into the Youtube opened in a new tab and check the link
+
+    # 1. Scroll into the footer
+    # 2. Wait twitter to be visible and click on Twitter
+    # 3. Switch into the twitter new opened tab, check the link
+    # 4. Switch into the first tab and click on Youtube
+    # 5. Switch into the Youtube opened in a new tab and check the link
     def test_switch_to_tab_twitter_youtube(self, browser):
         review_us = ReviewUs(browser)
         twitter = TwitterPage(browser)
         youtube = YouTubePage(browser)
         home = Home(browser)
-
 
         review_us.scroll_into_footer()
         home.wait_twitter_displayed()
@@ -71,3 +62,16 @@ class TestHomePage():
         home.click_on_youtube_icon()
         youtube.switch_to_opened_tab2()
         assert youtube.get_current_url() == "https://www.youtube.com/Steegle"
+
+    # Hover on About and click on item, check the link, the tile and logo displayed
+    def test_blog(self, browser):
+        about = Home(browser)
+        blog = Blogpage(browser)
+
+        about.hover_on_about()
+        blog.click_on_blog()
+        assert blog.get_page_title() == "Blog"
+        assert blog.get_current_url() == "https://www.steegle.com/news"
+        blog.wait_logo_displayed()
+
+

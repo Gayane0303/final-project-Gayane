@@ -1,4 +1,5 @@
 import ec as ec
+from selenium.webdriver import ActionChains
 from selenium.webdriver.common.by import By
 import time
 
@@ -15,8 +16,15 @@ class Home(BasePage):
     _youtube = {"by": By.LINK_TEXT, "value": 'YouTube'}
 
 
+
+
     def __init__(self, driver):
         self.driver=driver
+
+    def hover_on_about(self):
+        action = ActionChains(self.driver)
+        _about = self.driver.find_element_by_xpath('//*[@id="WDxLfe"]/ul/li[7]/div[1]')
+        action.move_to_element(_about).perform()
 
     def wait_twitter_displayed(self):
         return self._is_element_displayed(self._twitter, timeout=3)
